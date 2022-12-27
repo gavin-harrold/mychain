@@ -35,6 +35,15 @@ class Block():
                     self.timeStamp +
                     self.data)
 
+    def toJson(self):
+        blockObject = {
+            "data" : self.data,
+            "hash" : self.hash,
+            "previousHash" : self.previousHash,
+            "timestamp" : self.timeStamp
+        }
+        return blockObject
+
 class HashUtil():
     def applyHash(hash):
         '''
@@ -51,15 +60,24 @@ class HashUtil():
         output = output.hexdigest()
         return output
 
+
+
 def main():
-    founder = Block("First block data", "0")
-    print("Hash for first block: ", founder.hash)
+    blockchain = []
+    blockchain.append(Block("First block data", "0"))
+    #print("Hash for first block: ", founder.hash)
 
-    second = Block("second data here", founder.hash)
-    print("hash of second block: ", second.hash)
+    blockchain.append(Block("second data here", blockchain[-1].hash))
+    #print("hash of second block: ", second.hash)
 
-    third = Block("third block data section", second.hash)
-    print("hash for third block: ", third.hash)
+    blockchain.append(Block("third block data section", blockchain[-1].hash))
+    #print("hash for third block: ", third.hash)
+    #pretty print blockchain
+    print("The blockchain: \n [")
+    for block in blockchain:
+        print("    "+json.dumps(block.toJson(), sort_keys=True, indent=4)+ ",")
+    print("]")
+
 
 if __name__ == "__main__":
     main()
