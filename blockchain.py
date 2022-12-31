@@ -34,15 +34,19 @@ class Block():
                     self.previousHash +
                     self.timeStamp +
                     self.data)
+    
+    def prettyPrint(self):
+        '''
+        prettyPrint: prints information about blocks
 
-    def toJson(self):
-        blockObject = {
-            "data" : self.data,
-            "hash" : self.hash,
-            "previousHash" : self.previousHash,
-            "timestamp" : self.timeStamp
-        }
-        return blockObject
+        TODO: rewrite to be less brute force
+        '''
+        print("    {")
+        print("        'data': '"+self.data+"',")
+        print("        'hash': '"+self.hash+"',")
+        print("        'previousHash': '"+self.previousHash+"',")
+        print("        'timestamp': '"+self.timeStamp+"'")
+        print("    },")
 
 class HashUtil():
     def applyHash(hash):
@@ -63,6 +67,9 @@ class HashUtil():
 
 
 def main():
+    '''
+    main: runs program and creates blocks
+    '''
     blockchain = []
     blockchain.append(Block("First block data", "0"))
     #print("Hash for first block: ", founder.hash)
@@ -74,9 +81,11 @@ def main():
     #print("hash for third block: ", third.hash)
     #pretty print blockchain
     print("The blockchain: \n [")
+    #block info here!
     for block in blockchain:
-        print("    "+json.dumps(block.toJson(), sort_keys=True, indent=4)+ ",")
+        block.prettyPrint()
     print("]")
+    
 
 
 if __name__ == "__main__":
