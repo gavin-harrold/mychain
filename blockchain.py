@@ -1,8 +1,8 @@
 from datetime import datetime
 import hashlib
-import json
 
 class Block():
+
     def __init__(self, data, previousHash):
         '''
         Construct Block object representing a block in the blockchain
@@ -48,6 +48,12 @@ class Block():
         print("        'timestamp': '"+self.timeStamp+"'")
         print("    },")
 
+    def mineBlock(self, difficulty):
+        target = str(difficulty).replace('\0', '0')
+        while str(self.hash)[:difficulty] != target:
+            self.hash = self.calculateHash()
+        print("Block mined: "+self.hash)
+
 class HashUtil():
     def applyHash(hash):
         '''
@@ -65,20 +71,50 @@ class HashUtil():
         return output
 
 
+def validChain(blockchain):
+    '''
+    validChain: checks hashes to verify integrity of blockchain
+
+    Inputs:
+    - blockchain (Type: Array/List)
+
+    Returns:
+    - True if hashes match, false if not
+    '''
+    for x in range(1, len(blockchain)):
+        currentBlock = blockchain[x]
+        previousBlock = blockchain[x-1]
+
+        #compare registered and calc'd hash
+        if(currentBlock.hash != currentBlock.calculateHash()):
+            print("Current hashes not equal")
+            return False
+        #comparing previous registered and previous calc'd hash
+        if(previousBlock.hash != previousBlock.calculateHash()):
+            print("Previous hashes not equal")
+            return False
+    return True    
 
 def main():
+    difficulty = 3
     '''
     main: runs program and creates blocks
     '''
     blockchain = []
     blockchain.append(Block("First block data", "0"))
-    #print("Hash for first block: ", founder.hash)
+    print("attempting to mine first block...")
+    blockchain[0].mineBlock(difficulty)
 
     blockchain.append(Block("second data here", blockchain[-1].hash))
-    #print("hash of second block: ", second.hash)
+    print("attempting to mine second block...")
+    blockchain[1].mineBlock(difficulty)
 
     blockchain.append(Block("third block data section", blockchain[-1].hash))
-    #print("hash for third block: ", third.hash)
+    print("attempting to mine third block...")
+    blockchain[2].mineBlock(difficulty)
+
+    print("Blockchain is valid: "+validChain(blockchain))
+
     #pretty print blockchain
     print("The blockchain: \n [")
     #block info here!
